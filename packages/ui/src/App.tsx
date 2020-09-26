@@ -25,7 +25,7 @@ function App() {
 
     setRequestInProgress(true);
     try {
-      await sleep(100000);
+      await sleep(2000);
       // const result = await api.requestFunds(address)
       setSuccess(true);
     } catch (error) {

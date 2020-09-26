@@ -25,11 +25,15 @@
 }
 
 .Address-input {
-  width: 420px;
+  width: 425px;
   height: 40px;
   padding-left: 6px;
   padding-right: 6px;
   font-size: calc(6px + 1vmin);
+}
+
+.Address-input:focus {
+  outline: none;
 }
 
 .Submit-button {
@@ -37,6 +41,9 @@
   padding-left: 10px;
   padding-right: 10px;
   font-size: calc(6px + 1vmin);
+  background-color: #67f9d9;
+  border-width: 1px;
+  border-style: inset;
 }
 
 .Success-message {
