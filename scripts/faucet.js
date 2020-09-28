@@ -56,4 +56,6 @@ async function handleRequest(to, amount) {
 	console.log("sent transfer!", receipt)
 }
 
-handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 5000)
+//handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 5000)
+
+module.exports = { handleRequest }
