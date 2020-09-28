@@ -1,0 +1,61 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  padding-top: 100px;
+  padding-bottom: 50px;
+  max-width: 600px;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.Address-input {
+  width: 425px;
+  height: 40px;
+  padding-left: 6px;
+  padding-right: 6px;
+  font-size: calc(6px + 1vmin);
+}
+
+.Address-input:focus {
+  outline: none;
+}
+
+.Submit-button {
+  height: 46px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: calc(6px + 1vmin);
+  background-color: #67f9d9;
+  border-width: 1px;
+  border-style: inset;
+}
+
+.Success-message {
+  color: #67f9d9;
+  font-size: 16px;
+}
+
+.Error-message {
+  color: red;
+  font-size: 16px;
+}
+
+.Progress-indicator {
+  color: #67f9d9 !important;
+}
