@@ -21,11 +21,11 @@ async function getCurrentAccount() {
 async function requestFromFaucet() {
 	let cmd = exec(`aragonchaincli tx faucet request 100000000000000ara --from ${node0.key} --chain-id aragonchain-2 --fees 2ara --yes`,
 		function (error, stdout, stderr) {
-	        console.log('stdout: ' + stdout);
-	        console.log('stderr: ' + stderr);
+	        console.log('stdout:\n' + stdout);
 	        if (error !== null) {
-	             console.log('exec error: ' + error);
-	             process.exit(1)
+	        	console.log('stderr:\n' + stderr);
+	            console.log('exec error: ' + error);
+	            process.exit(1)
 	        }
 	    })
 }
@@ -55,7 +55,5 @@ async function handleRequest(to, amount) {
 	let receipt = await web3.eth.sendTransaction({to: to, from: from, value: amount, gasPrice: 1, gasLimit: 22000})
 	console.log("sent transfer!", receipt)
 }
-
-//handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 5000)
 
 module.exports = { handleRequest }
