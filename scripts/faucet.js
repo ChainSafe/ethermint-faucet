@@ -1,6 +1,15 @@
+const node0 = {
+	laddr: "http://54.210.246.165:8545",
+	key: "node0"
+}
+
 const Web3 = require("web3");
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.HttpProvider(node0.laddr));
 var exec = require('child_process').exec, child;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 async function getCurrentAccount() {
   const currentAccounts = await web3.eth.getAccounts();
@@ -8,7 +17,7 @@ async function getCurrentAccount() {
 }
 
 async function requestFromFaucet() {
-	let cmd = exec("aragonchaincli tx faucet request 1000000000000000ara --from mykey --chain-id aragonchain-1123698127639817236 --fees 2ara --yes",
+	let cmd = exec(`aragonchaincli tx faucet request 100000000000000ara --from ${node0.key} --chain-id aragonchain-2 --fees 2ara --yes`,
 		function (error, stdout, stderr) {
 	        console.log('stdout: ' + stdout);
 	        console.log('stderr: ' + stderr);
@@ -17,7 +26,6 @@ async function requestFromFaucet() {
 	             exit(1)
 	        }
 	    })
-	//cmd()
 }
 
 async function handleRequest(to, amount) {
@@ -29,11 +37,13 @@ async function handleRequest(to, amount) {
 	}
 	while (balance < amount) {
 		balance = await web3.eth.getBalance(from)
+		sleep(100)
 	}
+
 	console.log("making transfer")
 
 	let receipt = await web3.eth.sendTransaction({to: to, from: from, value: amount, gasPrice: 1, gasLimit: 22000})
 	console.log("sent transfer!", receipt)
 }
 
-handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 100)
+handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 999999999900000001)
