@@ -3,6 +3,8 @@ const node0 = {
 	key: "node0"
 }
 
+const maxRetries = 10
+
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider(node0.laddr));
 var exec = require('child_process').exec, child;
@@ -39,6 +41,11 @@ async function handleRequest(to, amount) {
 	while (balance < amount) {
 		balance = await web3.eth.getBalance(from)
 		sleep(100)
+		retries++
+		if (retries == maxRetries) {
+			console.log("unable to make faucet request, please request lower amount")
+			exit(2)
+		}
 	}
 
 	console.log("making transfer")
@@ -47,4 +54,4 @@ async function handleRequest(to, amount) {
 	console.log("sent transfer!", receipt)
 }
 
-handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 100004899955990)
+handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 5000)
