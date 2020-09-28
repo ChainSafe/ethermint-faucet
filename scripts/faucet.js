@@ -32,7 +32,7 @@ async function handleRequest(to, amount) {
 	let from = await getCurrentAccount();
 	let balance = await web3.eth.getBalance(from);
 	console.log("balance: ", balance)
-	if (parseInt(balance) <= amount) {
+	if (parseInt(balance, 10) <= amount) {
 		console.log(`balance ${balance} less than requested amount ${amount}, making faucet request`)
 		await requestFromFaucet()
 	}
@@ -47,4 +47,4 @@ async function handleRequest(to, amount) {
 	console.log("sent transfer!", receipt)
 }
 
-handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 10000000000000)
+handleRequest("0x786b82b6454c6e1a085f3ca31ff9f82d5469bfcc", 100004899955990)
