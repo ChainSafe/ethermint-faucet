@@ -25,7 +25,7 @@ async function requestFromFaucet() {
 	        console.log('stderr: ' + stderr);
 	        if (error !== null) {
 	             console.log('exec error: ' + error);
-	             exit(1)
+	             process.exit(1)
 	        }
 	    })
 }
@@ -38,7 +38,7 @@ async function handleRequest(to, amount) {
 		console.log(`balance ${balance} less than requested amount ${amount}, making faucet request`)
 		await requestFromFaucet()
 	}
-	
+
 	let retries = 0
 	while (balance < amount) {
 		balance = await web3.eth.getBalance(from)
@@ -46,7 +46,7 @@ async function handleRequest(to, amount) {
 		retries++
 		if (retries == maxRetries) {
 			console.log("unable to make faucet request, please request lower amount")
-			exit(2)
+			process.exit(2)
 		}
 	}
 
