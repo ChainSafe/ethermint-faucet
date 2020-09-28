@@ -38,6 +38,8 @@ async function handleRequest(to, amount) {
 		console.log(`balance ${balance} less than requested amount ${amount}, making faucet request`)
 		await requestFromFaucet()
 	}
+	
+	let retries = 0
 	while (balance < amount) {
 		balance = await web3.eth.getBalance(from)
 		sleep(100)
