@@ -8,11 +8,51 @@ import dotenv from "dotenv";
 dotenv.config();
 
 AWS.config.update({
-  region: "us-east-1",
-  endpoint: "https://dynamodb.us-east-1.amazonaws.com",
+  region: "localhost",
+  endpoint: "http://localhost:3001",
+  // accessKeyId default can be used while using the downloadable version of DynamoDB.
+  // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+  accessKeyId: "fakeMyKeyId",
+  // secretAccessKey default can be used while using the downloadable version of DynamoDB.
+  // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+  secretAccessKey: "fakeSecretAccessKey",
 });
 
-const docClient = new AWS.DynamoDB.DocumentClient();
+const dynamoDb = new AWS.DynamoDB({
+  region: "localhost",
+  endpoint: "http://localhost:3001",
+});
+
+const docClient = new AWS.DynamoDB.DocumentClient({
+  region: "localhost",
+  endpoint: "http://localhost:3001",
+});
+
+var createParams = {
+  TableName: "aragon-skylark-faucet-db",
+  KeySchema: [
+    { AttributeName: "address", KeyType: "HASH" },
+    { AttributeName: "expiration", KeyType: "RANGE" },
+  ],
+  AttributeDefinitions: [
+    { AttributeName: "address", AttributeType: "S" },
+    { AttributeName: "expiration", AttributeType: "N" },
+  ],
+  ProvisionedThroughput: {
+    ReadCapacityUnits: 5,
+    WriteCapacityUnits: 5,
+  },
+};
+
+dynamoDb.createTable(createParams, function (err, data) {
+  if (err) {
+    console.log(
+      "Unable to create table: " + "\n" + JSON.stringify(err, undefined, 2)
+    );
+  } else {
+    console.log("Created table: " + "\n" + JSON.stringify(data, undefined, 2));
+  }
+});
 
 const app = express();
 
@@ -22,11 +62,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post("/", (req, res) => {
+  const addressRequesting = req.body.address;
   var queryParams = {
     TableName: "aragon-skylark-faucet-db",
     KeyConditionExpression: "address = :a",
     ExpressionAttributeValues: {
-      ":a": req.body.address,
+      ":a": addressRequesting,
     },
   };
 
@@ -37,6 +78,7 @@ app.post("/", (req, res) => {
         .status(503)
         .send(JSON.stringify("There was an error connecting to the database"));
     } else {
+      console.log(data.Items);
       if (data.Items.length > 0) {
         res
           .status(429)
@@ -47,11 +89,11 @@ app.post("/", (req, res) => {
           );
       } else {
         try {
-          // handleRequest(req.body.address, 5);
+          // handleRequest(addressRequesting, 5);
           var putParams = {
             TableName: "aragon-skylark-faucet-db",
             Item: {
-              address: req.body.address,
+              address: addressRequesting,
               expiration: dayjs().add(1, "day").unix(),
             },
           };
@@ -67,7 +109,7 @@ app.post("/", (req, res) => {
               res
                 .status(200)
                 .send(
-                  JSON.stringify(`Successfully sent to ${req.body.address}`)
+                  JSON.stringify(`Successfully sent to ${addressRequesting}`)
                 );
             }
           });
