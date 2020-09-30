@@ -6,7 +6,6 @@ var dotenv = require("dotenv");
 // import { handleRequest } from "./faucet";
 
 dotenv.config({ path: "./.env" });
-console.log(process.env);
 AWS.config.update({
   region: "us-east-1",
   endpoint: "https://dynamodb.us-east-1.amazonaws.com",
