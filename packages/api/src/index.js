@@ -71,7 +71,7 @@ async function getCurrentAccount() {
 
 async function requestFromFaucet() {
   let cmd = exec(
-    `aragonchaincli tx faucet request 100000000000000ara --from ${node0.key} --chain-id aragonchain-2 --fees 2ara --yes`,
+    `ethermintcli tx faucet request 100000000000000aphoton --from ${node0.key} --chain-id ethermint-2 --fees 2photon --yes`,
     function (error, stdout, stderr) {
       console.log("stdout:\n" + stdout);
       if (error !== null) {
