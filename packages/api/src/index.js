@@ -115,7 +115,7 @@ app.post("/", (req, res) => {
           .status(429)
           .send(
             JSON.stringify(
-              "'You can request funds from this faucet every 24 hours. Please try again later.'"
+              `You can request funds from this faucet every ${process.env.COOLDOWN_TIME} hours. Please try again later.`
             )
           );
       } else {
@@ -125,7 +125,7 @@ app.post("/", (req, res) => {
             TableName: "aragon-skylark-faucet-db",
             Item: {
               address: addressRequesting,
-              expiration: dayjs().add(1, "day").unix(),
+              expiration: dayjs().add(process.env.COOLDOWN_TIME, "hour").unix(),
             },
           };
 
