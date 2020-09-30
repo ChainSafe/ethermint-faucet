@@ -1,8 +1,8 @@
-var dayjs = require("dayjs");
-var cors = require("cors");
-var express = require("express");
-var AWS = require("aws-sdk");
-var dotenv = require("dotenv");
+const dayjs = require("dayjs");
+const cors = require("cors");
+const express = require("express");
+const AWS = require("aws-sdk");
+const dotenv = require("dotenv");
 
 dotenv.config({ path: "./.env" });
 AWS.config.update({
@@ -38,7 +38,7 @@ async function getCurrentAccount() {
 }
 
 async function requestFromFaucet() {
-  let cmd = exec(
+  exec(
     `ethermintcli tx faucet request ${process.env.FAUCET_REQUEST_AMOUNT}aphoton --from ${node0.key} --chain-id ${process.env.CHAIN_ID} --fees 2photon --yes`,
     function (error, stdout, stderr) {
       console.log("stdout:\n" + stdout);
@@ -109,7 +109,6 @@ app.post("/", (req, res) => {
         .status(503)
         .send(JSON.stringify("There was an error connecting to the database"));
     } else {
-      console.log(data.Items);
       if (data.Items.length > 0) {
         res
           .status(429)
@@ -136,14 +135,12 @@ app.post("/", (req, res) => {
                 JSON.stringify(err, null, 2)
               );
             } else {
-              console.log("Added item:", JSON.stringify(data, null, 2));
-              res
-                .status(200)
-                .send(
-                  JSON.stringify(`Successfully sent to ${addressRequesting}`)
-                );
+              console.log("Faucet entry added:", JSON.stringify(data, null, 2));
             }
           });
+          res
+            .status(200)
+            .send(JSON.stringify(`Successfully sent to ${addressRequesting}`));
         } catch (error) {
           res
             .status(503)
