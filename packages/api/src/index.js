@@ -68,7 +68,7 @@ async function handleRequest(to, amount) {
     retries++;
     if (retries == maxRetries) {
       console.log("unable to make faucet request");
-      return Promise.reject('The Faucet is broke. Try again later')
+      return Promise.reject("The Faucet is broke. Try again later");
     }
   }
 
@@ -82,7 +82,7 @@ async function handleRequest(to, amount) {
     gasLimit: 22000,
   });
   console.log("sent transfer!", receipt);
-  return Promise.resolve()
+  return Promise.resolve();
 }
 
 const app = express();
@@ -102,7 +102,7 @@ app.post("/", (req, res) => {
     },
   };
 
-  docClient.query(queryParams, function (err, data) {
+  docClient.query(queryParams, async function (err, data) {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
       res

@@ -1,1 +1,1 @@
-# aragon-chain-faucet
+# ethermint-faucet
