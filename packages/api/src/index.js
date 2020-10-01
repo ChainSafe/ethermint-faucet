@@ -13,7 +13,7 @@ AWS.config.update({
 });
 
 const node0 = {
-  daddr: process.env,ETHERMINT_NODE_ADDR,
+  daddr: process.env.ETHERMINT_NODE_ADDR,
   laddr: process.env.ETHERMINT_RPC_ADDR,
   key: process.env.ETHERMINT_KEY_NAME,
 };
