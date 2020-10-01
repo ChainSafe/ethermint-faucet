@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AragonChainLogo from "./aragon-chain-logo.svg";
+import EthermintLogo from "./ethermint-logo.png";
 import "./App.css";
 import web3 from "web3";
 import { CircularProgress } from "@material-ui/core";
@@ -29,7 +29,6 @@ function App() {
       // const result = await api.requestFunds(address)
       setSuccess(true);
     } catch (error) {
-      // The API should return a descriptive error here
       setError(error.message);
     }
     setRequestInProgress(false);
@@ -43,12 +42,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img
-          src={AragonChainLogo}
-          className="App-logo"
-          alt="Aragon Chain Logo"
-        />
-        <p>Skylark Testnet Faucet</p>
+        <img src={EthermintLogo} className="App-logo" alt="Ethermint Logo" />
+        <p>Ethermint Testnet Faucet</p>
         {!requestInProgress ? (
           <div>
             <input
@@ -75,7 +70,9 @@ function App() {
             <p className="Success-message">
               Funds successfully sent to {address}
             </p>
-            <button onClick={resetState}>Request for another address</button>
+            <button onClick={resetState} className="Request-more-button">
+              Request for another address
+            </button>
           </>
         )}
       </header>

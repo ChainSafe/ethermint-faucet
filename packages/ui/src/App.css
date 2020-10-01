@@ -1,16 +1,20 @@
 .App {
   text-align: center;
+  background-image: url(/ethermint-background.png);
+  background-position-x: 50%;
+  background-position-y: center;
+  background-size: cover;
+  background-color: rgb(27, 30, 54);
 }
 
 .App-logo {
   padding-top: 100px;
   padding-bottom: 50px;
-  max-width: 600px;
+  max-width: 300px;
   pointer-events: none;
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -41,13 +45,23 @@
   padding-left: 10px;
   padding-right: 10px;
   font-size: calc(6px + 1vmin);
-  background-color: #67f9d9;
+  background-color: #8ca9c6;
+  color: #fff;
+  border-width: 1px;
+  border-style: inset;
+}
+
+.Request-more-button {
+  height: 46px;
+  font-size: calc(6px + 1vmin);
+  background-color: #8ca9c6;
+  color: #fff;
   border-width: 1px;
   border-style: inset;
 }
 
 .Success-message {
-  color: #67f9d9;
+  color: #fff;
   font-size: 16px;
 }
 
@@ -57,5 +71,5 @@
 }
 
 .Progress-indicator {
-  color: #67f9d9 !important;
+  color: #fff !important;
 }
