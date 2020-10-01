@@ -95,7 +95,7 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/", (req, res) => {
   const addressRequesting = req.body.address;
   var queryParams = {
-    TableName: "aragon-skylark-faucet-db",
+    TableName: process.env.DYNAMODB_TABLE_NAME,
     KeyConditionExpression: "address = :a",
     ExpressionAttributeValues: {
       ":a": addressRequesting,
