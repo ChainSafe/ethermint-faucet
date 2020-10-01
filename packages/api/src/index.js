@@ -13,7 +13,8 @@ AWS.config.update({
 });
 
 const node0 = {
-  laddr: process.env.ETHERMINT_NODE_ADDR,
+  daddr: process.env,ETHERMINT_NODE_ADDR,
+  laddr: process.env.ETHERMINT_RPC_ADDR,
   key: process.env.ETHERMINT_KEY_NAME,
 };
 
@@ -39,7 +40,7 @@ async function getCurrentAccount() {
 
 async function requestFromFaucet() {
   exec(
-    `ethermintcli tx faucet request ${process.env.FAUCET_REQUEST_AMOUNT}aphoton --from ${node0.key} --chain-id ${process.env.CHAIN_ID} --fees 2photon --yes`,
+    `ethermintcli tx faucet request ${process.env.FAUCET_REQUEST_AMOUNT}aphoton --from ${node0.key} --chain-id ${process.env.CHAIN_ID} --fees 2photon --node ${daddr} --yes`,
     function (error, stdout, stderr) {
       console.log("stdout:\n" + stdout);
       if (error !== null) {
