@@ -5,6 +5,7 @@ const AWS = require("aws-sdk");
 const dotenv = require("dotenv");
 
 dotenv.config({ path: "./.env" });
+
 AWS.config.update({
   region: "us-east-1",
   endpoint: "https://dynamodb.us-east-1.amazonaws.com",
@@ -21,6 +22,8 @@ const node0 = {
 const docClient = new AWS.DynamoDB.DocumentClient({
   region: "us-east-1",
   endpoint: "https://dynamodb.us-east-1.amazonaws.com",
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
 const maxRetries = 10;
@@ -95,6 +98,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post("/", (req, res) => {
   const addressRequesting = req.body.address;
+  const isAddress = web3.utils.isAddress(addressRequesting);
+
+  if (!isAddress) {
+    res.status(400).send(JSON.stringify("This is not an ETH Address"));
+  }
+
   var queryParams = {
     TableName: process.env.DYNAMODB_TABLE_NAME,
     KeyConditionExpression: "address = :a",
@@ -110,7 +119,9 @@ app.post("/", (req, res) => {
         .status(503)
         .send(JSON.stringify("There was an error connecting to the database"));
     } else {
+      console.log("Successfully queried db");
       if (data.Items.length > 0) {
+        console.log("Faucet rate limit exceeded for this user");
         res
           .status(429)
           .send(
@@ -119,16 +130,17 @@ app.post("/", (req, res) => {
             )
           );
       } else {
+        console.log("no previous faucet payments made. executing");
         try {
           await handleRequest(addressRequesting, process.env.FAUCET_AMOUNT);
           var putParams = {
-            TableName: "aragon-skylark-faucet-db",
+            TableName: process.env.DYNAMODB_TABLE_NAME,
             Item: {
               address: addressRequesting,
               expiration: dayjs().add(process.env.COOLDOWN_TIME, "hour").unix(),
             },
           };
-
+          console.log("faucet payment was successful. saving to db");
           docClient.put(putParams, function (err, data) {
             if (err) {
               console.error(
