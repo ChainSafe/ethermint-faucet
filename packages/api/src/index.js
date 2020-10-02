@@ -76,15 +76,24 @@ async function handleRequest(to, amount) {
     }
   }
 
-  console.log("making transfer");
+  if (process.env.ETHERMINT_PRIVATE_KEY == "0x" || process.env.ETHERMINT_PRIVATE_KEY == undefined) {
+    console.error(
+      "No private key set. Please make sure a valid private key is used for the faucet"
+    );
+    return Promise.reject("Invalid faucet setup. Please contact the maintainer of the faucet for help.");
+  }
 
-  let receipt = await web3.eth.sendTransaction({
+  console.log("making transfer");
+  let signedTx = await web3.eth.accounts.signTransaction({
     to: to,
     from: from,
     value: amount,
     gasPrice: 1,
     gasLimit: 22000,
-  });
+  }, process.env.ETHERMINT_PRIVATE_KEY)
+  console.log("signed tx")
+
+  let receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
   console.log("sent transfer!", receipt);
   return Promise.resolve();
 }
