@@ -77,14 +77,16 @@ async function handleRequest(to, amount) {
   }
 
   console.log("making transfer");
-
-  let receipt = await web3.eth.sendTransaction({
+  let signedTx = await web3.eth.accounts.signTransaction({
     to: to,
     from: from,
     value: amount,
     gasPrice: 1,
     gasLimit: 22000,
-  });
+  }, process.env.ETHERMINT_PRIVATE_KEY)
+  console.log("signed tx")
+
+  let receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
   console.log("sent transfer!", receipt);
   return Promise.resolve();
 }
