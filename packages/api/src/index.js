@@ -76,6 +76,13 @@ async function handleRequest(to, amount) {
     }
   }
 
+  if (process.env.ETHERMINT_PRIVATE_KEY == "0x" || process.env.ETHERMINT_PRIVATE_KEY == undefined) {
+    console.error(
+      "No private key set. Please make sure a valid private key is used for the faucet"
+    );
+    return Promise.reject("Invalid faucet setup. Please contact the maintainer of the faucet for help.");
+  }
+
   console.log("making transfer");
   let signedTx = await web3.eth.accounts.signTransaction({
     to: to,
