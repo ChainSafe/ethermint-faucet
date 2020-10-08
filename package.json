@@ -17,6 +17,6 @@
   },
   "scripts": {
     "start:api": "yarn wsrun -p @ethermint/faucet-api -c start",
-    "build:webapp": "yarn wsrun -p @@ethermint/faucet-ui -c build"
+    "build:webapp": "yarn wsrun -p @ethermint/faucet-ui -c build"
   }
 }
