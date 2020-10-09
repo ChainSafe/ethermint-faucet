@@ -55,6 +55,7 @@ function App() {
   const resetState = () => {
     setAddress("");
     setSuccess(false);
+    setError(false);
   };
 
   return (
