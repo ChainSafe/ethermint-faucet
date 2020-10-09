@@ -76,22 +76,30 @@ async function handleRequest(to, amount) {
     }
   }
 
-  if (process.env.ETHERMINT_PRIVATE_KEY == "0x" || process.env.ETHERMINT_PRIVATE_KEY == undefined) {
+  if (
+    process.env.ETHERMINT_PRIVATE_KEY == "0x" ||
+    process.env.ETHERMINT_PRIVATE_KEY == undefined
+  ) {
     console.error(
       "No private key set. Please make sure a valid private key is used for the faucet"
     );
-    return Promise.reject("Invalid faucet setup. Please contact the maintainer of the faucet for help.");
+    return Promise.reject(
+      "Invalid faucet setup. Please contact the maintainer of the faucet for help."
+    );
   }
 
   console.log("making transfer");
-  let signedTx = await web3.eth.accounts.signTransaction({
-    to: to,
-    from: from,
-    value: amount,
-    gasPrice: 1,
-    gasLimit: 22000,
-  }, process.env.ETHERMINT_PRIVATE_KEY)
-  console.log("signed tx")
+  let signedTx = await web3.eth.accounts.signTransaction(
+    {
+      to: to,
+      from: from,
+      value: amount,
+      gasPrice: 1,
+      gasLimit: 22000,
+    },
+    process.env.ETHERMINT_PRIVATE_KEY
+  );
+  console.log("signed tx");
 
   let receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
   console.log("sent transfer!", receipt);
@@ -107,7 +115,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post("/", (req, res) => {
   const addressRequesting = req.body.address;
-  const isAddress = web3.utils.isAddress(addressRequesting);
+  const isAddress = Web3.utils.isAddress(addressRequesting);
 
   if (!isAddress) {
     res.status(400).send(JSON.stringify("This is not an ETH Address"));
