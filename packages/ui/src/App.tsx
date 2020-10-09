@@ -4,16 +4,12 @@ import "./App.css";
 import web3 from "web3";
 import { CircularProgress } from "@material-ui/core";
 
-const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 function App() {
   const [address, setAddress] = useState("");
   const [validAddress, setValidAddress] = useState(false);
   const [requestInProgress, setRequestInProgress] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | false>(false);
+  const [success, setSuccess] = useState<string | false>(false);
 
   useEffect(() => {
     const isAddress = web3.utils.isAddress(address);
@@ -21,13 +17,35 @@ function App() {
   }, [address]);
 
   const handleFaucetRequest = async () => {
-    if (!address || !validAddress) return;
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    if (!address || !validAddress || !apiUrl) return;
 
     setRequestInProgress(true);
     try {
-      await sleep(2000);
-      // const result = await api.requestFunds(address)
-      setSuccess(true);
+      const response = await fetch(apiUrl, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ address }),
+      });
+
+      if (!response.ok) {
+        const responseBody = await response.json();
+        console.log(responseBody);
+        if (response.status === 429) {
+          setError(responseBody);
+        } else {
+          setError(
+            "There was an internal server error. Please try again later."
+          );
+        }
+      } else {
+        const responseBody = await response.json();
+        console.log(responseBody);
+        setSuccess("Yay");
+      }
     } catch (error) {
       setError(error.message);
     }
@@ -51,12 +69,12 @@ function App() {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Enter address"
-              disabled={requestInProgress || success}
+              disabled={requestInProgress || !!success}
             />
             <button
               onClick={handleFaucetRequest}
               className="Submit-button"
-              disabled={!validAddress || requestInProgress || success}
+              disabled={!validAddress || requestInProgress || !!success}
             >
               Give me tokens
             </button>
@@ -64,8 +82,8 @@ function App() {
         ) : (
           <CircularProgress className="Progress-indicator" />
         )}
-        {error && <p className="Error-message">{error}</p>}
-        {success && (
+        {!!error && <p className="Error-message">{error}</p>}
+        {!!success && (
           <>
             <p className="Success-message">
               Funds successfully sent to {address}
