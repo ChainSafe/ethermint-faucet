@@ -21,6 +21,8 @@ function App() {
 
     if (!address || !validAddress || !apiUrl) return;
 
+    setSuccess(false);
+    setError(false);
     setRequestInProgress(true);
     try {
       const response = await fetch(apiUrl, {
@@ -55,6 +57,7 @@ function App() {
   const resetState = () => {
     setAddress("");
     setSuccess(false);
+    setError(false);
   };
 
   return (
