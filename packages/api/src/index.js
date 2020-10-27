@@ -172,6 +172,7 @@ app.post("/", (req, res) => {
             .status(200)
             .send(JSON.stringify(`Successfully sent to ${addressRequesting}`));
         } catch (error) {
+          console.error(error);
           res
             .status(503)
             .send(
